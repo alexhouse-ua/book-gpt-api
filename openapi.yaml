@@ -1,15 +1,11 @@
 openapi: 3.1.0
 info:
   title: Shelf Help API
-  description: API for managing and enriching your personalized romance book database via Firebase.
   version: 1.0.0
-servers:
-  - url: https://book-gpt-api.vercel.app
-
 paths:
   /api/add_book:
     post:
-      summary: Add a new book to Firebase
+      summary: Add a new book to the Firebase database
       operationId: addBook
       requestBody:
         required: true
@@ -17,20 +13,14 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - goodreads_id
-              properties:
-                goodreads_id:
-                  type: string
-                [additionalProperties]:
-                  description: Any valid Firebase book fields
+              additionalProperties: true
       responses:
         '200':
-          description: Book successfully added
+          description: Book added successfully
 
   /api/update_book:
     patch:
-      summary: Update fields of an existing book
+      summary: Update an existing book in the Firebase database
       operationId: updateBook
       requestBody:
         required: true
@@ -40,19 +30,14 @@ paths:
               type: object
               required:
                 - goodreads_id
-              properties:
-                goodreads_id:
-                  type: string
-                updates:
-                  type: object
-                  additionalProperties: true
+              additionalProperties: true
       responses:
         '200':
-          description: Book fields updated
+          description: Book updated successfully
 
   /api/delete_book:
     delete:
-      summary: Delete a book from Firebase
+      summary: Delete a book from the Firebase database
       operationId: deleteBook
       requestBody:
         required: true
@@ -67,11 +52,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Book deleted
+          description: Book deleted successfully
 
   /api/fetch_books:
     post:
-      summary: Fetch books with optional filters
+      summary: Fetch all or filtered books from Firebase
       operationId: fetchBooks
       requestBody:
         required: false
@@ -79,14 +64,10 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                filters:
-                  type: object
-                  description: Filter using any field (e.g. status, tone, author_name)
-                  additionalProperties: true
+              additionalProperties: true
       responses:
         '200':
-          description: Books fetched
+          description: Books retrieved successfully
 
   /api/search_books:
     post:
@@ -98,28 +79,22 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                title:
-                  type: string
-                author_name:
-                  type: string
-                [additionalProperties]:
-                  type: string
+              additionalProperties: true
       responses:
         '200':
           description: Matching books returned
 
   /api/sync_rss:
     post:
-      summary: Sync new books from Goodreads RSS feed
-      operationId: syncRss
+      summary: Sync finished books from Goodreads RSS feed
+      operationId: syncRSS
       responses:
         '200':
-          description: Goodreads RSS feed synced
+          description: RSS sync triggered
 
   /api/check_library_holds:
     post:
-      summary: Check Kindle Unlimited, Hoopla, and Libby-based library availability
+      summary: Check availability across library and subscription sources
       operationId: checkLibraryHolds
       requestBody:
         required: false
@@ -127,14 +102,7 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                title:
-                  type: string
-                  description: Optional title for single-book search
-                filters:
-                  type: object
-                  description: Optional filters to limit books by field
-                  additionalProperties: true
+              additionalProperties: true
       responses:
         '200':
-          description: Availability status updated
+          description: Availability fields updated
