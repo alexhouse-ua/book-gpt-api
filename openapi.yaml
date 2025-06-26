@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: Shelf Help API
-  description: API endpoints for managing a Firebase-based reading assistant
+  description: API for managing and enriching your personalized romance book database via Firebase.
   version: 1.0.0
 servers:
   - url: https://book-gpt-api.vercel.app
