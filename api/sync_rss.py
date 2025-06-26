@@ -110,3 +110,5 @@ class handler(BaseHTTPRequestHandler):
                 "status": "error",
                 "message": str(e)
             }).encode())
+    def do_POST(self):
+        self.do_GET()
