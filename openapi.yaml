@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: Shelf Help API
+  description: API endpoints for managing a Firebase-based reading assistant
+  version: 1.0.0
+servers:
+  - url: https://book-gpt-api.vercel.app
+
+paths:
+  /api/add_book:
+    post:
+      summary: Add a new book to Firebase
+      operationId: addBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - goodreads_id
+              properties:
+                goodreads_id:
+                  type: string
+                [additionalProperties]:
+                  description: Any valid Firebase book fields
+      responses:
+        '200':
+          description: Book successfully added
+
+  /api/update_book:
+    patch:
+      summary: Update fields of an existing book
+      operationId: updateBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - goodreads_id
+              properties:
+                goodreads_id:
+                  type: string
+                updates:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Book fields updated
+
+  /api/delete_book:
+    delete:
+      summary: Delete a book from Firebase
+      operationId: deleteBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - goodreads_id
+              properties:
+                goodreads_id:
+                  type: string
+      responses:
+        '200':
+          description: Book deleted
+
+  /api/fetch_books:
+    post:
+      summary: Fetch books with optional filters
+      operationId: fetchBooks
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filters:
+                  type: object
+                  description: Filter using any field (e.g. status, tone, author_name)
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Books fetched
+
+  /api/search_books:
+    post:
+      summary: Search for a book by title, author, or other fields
+      operationId: searchBooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author_name:
+                  type: string
+                [additionalProperties]:
+                  type: string
+      responses:
+        '200':
+          description: Matching books returned
+
+  /api/sync_rss:
+    post:
+      summary: Sync new books from Goodreads RSS feed
+      operationId: syncRss
+      responses:
+        '200':
+          description: Goodreads RSS feed synced
+
+  /api/check_library_holds:
+    post:
+      summary: Check Kindle Unlimited, Hoopla, and Libby-based library availability
+      operationId: checkLibraryHolds
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Optional title for single-book search
+                filters:
+                  type: object
+                  description: Optional filters to limit books by field
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Availability status updated
