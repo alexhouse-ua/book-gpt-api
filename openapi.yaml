@@ -1,755 +1,205 @@
-openapi: 3.1.0
 info:
-  title: Shelf Help API
+  title: Shelf Help Book API
   version: 1.0.0
-servers:
-  - url: https://book-gpt-api.vercel.app
+openapi: 3.1.0
 paths:
   /api/add_book:
-  post:
-    summary: Add a new book to Firebase
-    operationId: addBook
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              guid:
-                type: string
-              goodreads_id:
-                type: string
-              Pubdate:
-                type: string
-              title:
-                type: string
-              link:
-                type: string
-              book_image_url:
-                type: string
-              book_small_image_url:
-                type: string
-              book_medium_image_url:
-                type: string
-              book_large_image_url:
-                type: string
-              book_description:
-                type: string
-              author_name:
-                type: string
-              isbn:
-                type: string
-              user_name:
-                type: string
-              user_rating:
-                type: string
-              user_read_at:
-                type: string
-              user_date_added:
-                type: string
-              user_date_created:
-                type: string
-              user_shelves:
-                type: string
-              user_review:
-                type: string
-              average_rating:
-                type: string
-              book_published:
-                type: string
-              description_html:
-                type: string
-              status:
-                type: string
-              updated_at:
-                type: string
-              book_title:
-                type: string
-              series_name:
-                type: string
-              series_number:
-                type: string
-              tone:
-                type: string
-              flavor:
-                type: string
-              trope:
-                type: string
-              library_hold_status_tuscaloosa_ebook:
-                type: string
-              library_hold_status_tuscaloosa_audio:
-                type: string
-              library_hold_status_seattle_ebook:
-                type: string
-              library_hold_status_seattle_audio:
-                type: string
-              library_hold_status_camellia_ebook:
-                type: string
-              library_hold_status_camellia_audio:
-                type: string
-              ku_availability:
-                type: string
-              hoopla_audio_available:
-                type: string
-              hoopla_ebook_available:
-                type: string
-              availability_source:
-                type: string
-              ku_expires_on:
-                type: string
-              pages_source:
-                type: string
-              next_release_date:
-                type: string
-              hype_flag:
-                type: string
-              queue_position:
-                type: string
-              queue_priority:
-                type: string
-              liked:
-                type: string
-              disliked:
-                type: string
-              extras:
-                type: string
-              notes:
-                type: string
-              rating_scale_tag:
-                type: string
-              inferred_score:
-                type: string
-              goal_year:
-                type: string
-            required:
-              - goodreads_id
-    responses:
-      '200':
-        description: Book added successfully
-
-  /api/update_book:
-    patch:
-      summary: Update an existing book in the Firebase database
-      operationId: updateBook
+    post:
+      operationId: api_add_book
       requestBody:
-        required: true
         content:
           application/json:
-           schema:
-  type: object
-  properties:
-    guid:
-      type: string
-    goodreads_id:
-      type: string
-    Pubdate:
-      type: string
-    title:
-      type: string
-    link:
-      type: string
-    book_image_url:
-      type: string
-    book_small_image_url:
-      type: string
-    book_medium_image_url:
-      type: string
-    book_large_image_url:
-      type: string
-    book_description:
-      type: string
-    author_name:
-      type: string
-    isbn:
-      type: string
-    user_name:
-      type: string
-    user_rating:
-      type: string
-    user_read_at:
-      type: string
-    user_date_added:
-      type: string
-    user_date_created:
-      type: string
-    user_shelves:
-      type: string
-    user_review:
-      type: string
-    average_rating:
-      type: string
-    book_published:
-      type: string
-    description_html:
-      type: string
-    status:
-      type: string
-    updated_at:
-      type: string
-    book_title:
-      type: string
-    series_name:
-      type: string
-    series_number:
-      type: string
-    tone:
-      type: string
-    flavor:
-      type: string
-    trope:
-      type: string
-    library_hold_status_tuscaloosa_ebook:
-      type: string
-    library_hold_status_tuscaloosa_audio:
-      type: string
-    library_hold_status_seattle_ebook:
-      type: string
-    library_hold_status_seattle_audio:
-      type: string
-    library_hold_status_camellia_ebook:
-      type: string
-    library_hold_status_camellia_audio:
-      type: string
-    ku_availability:
-      type: string
-    hoopla_audio_available:
-      type: string
-    hoopla_ebook_available:
-      type: string
-    availability_source:
-      type: string
-    ku_expires_on:
-      type: string
-    pages_source:
-      type: string
-    next_release_date:
-      type: string
-    hype_flag:
-      type: string
-    queue_position:
-      type: string
-    queue_priority:
-      type: string
-    liked:
-      type: string
-    disliked:
-      type: string
-    extras:
-      type: string
-    notes:
-      type: string
-    rating_scale_tag:
-      type: string
-    inferred_score:
-      type: string
-    goal_year:
-      type: string
-  required:
-    - goodreads_id
+            schema: &id001
+              properties:
+                Pubdate:
+                  type: string
+                author_name:
+                  type: string
+                availability_source:
+                  type: string
+                average_rating:
+                  type: string
+                book_description:
+                  type: string
+                book_image_url:
+                  type: string
+                book_large_image_url:
+                  type: string
+                book_medium_image_url:
+                  type: string
+                book_published:
+                  type: string
+                book_small_image_url:
+                  type: string
+                book_title:
+                  type: string
+                description_html:
+                  type: string
+                disliked:
+                  type: string
+                extras:
+                  type: string
+                flavor:
+                  type: string
+                goal_year:
+                  type: string
+                goodreads_id:
+                  type: string
+                guid:
+                  type: string
+                hoopla_audio_available:
+                  type: string
+                hoopla_ebook_available:
+                  type: string
+                hype_flag:
+                  type: string
+                inferred_score:
+                  type: string
+                isbn:
+                  type: string
+                ku_availability:
+                  type: string
+                ku_expires_on:
+                  type: string
+                library_hold_status_camellia_audio:
+                  type: string
+                library_hold_status_camellia_ebook:
+                  type: string
+                library_hold_status_seattle_audio:
+                  type: string
+                library_hold_status_seattle_ebook:
+                  type: string
+                library_hold_status_tuscaloosa_audio:
+                  type: string
+                library_hold_status_tuscaloosa_ebook:
+                  type: string
+                liked:
+                  type: string
+                link:
+                  type: string
+                next_release_date:
+                  type: string
+                notes:
+                  type: string
+                pages_source:
+                  type: string
+                queue_position:
+                  type: string
+                queue_priority:
+                  type: string
+                rating_scale_tag:
+                  type: string
+                series_name:
+                  type: string
+                series_number:
+                  type: string
+                status:
+                  type: string
+                title:
+                  type: string
+                tone:
+                  type: string
+                trope:
+                  type: string
+                updated_at:
+                  type: string
+                user_date_added:
+                  type: string
+                user_date_created:
+                  type: string
+                user_name:
+                  type: string
+                user_rating:
+                  type: string
+                user_read_at:
+                  type: string
+                user_review:
+                  type: string
+                user_shelves:
+                  type: string
+              type: object
+        required: true
       responses:
         '200':
-          description: Book updated successfully
-
+          description: Successful response
+      summary: POST request to /api/add_book
+  /api/check_library_holds:
+    post:
+      operationId: api_check_library_holds
+      requestBody:
+        content:
+          application/json:
+            schema: *id001
+        required: true
+      responses:
+        '200':
+          description: Successful response
+      summary: POST request to /api/check_library_holds
   /api/delete_book:
     delete:
-      summary: Delete a book from the Firebase database
-      operationId: deleteBook
+      operationId: api_delete_book
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-  type: object
-  properties:
-    guid:
-      type: string
-    goodreads_id:
-      type: string
-    Pubdate:
-      type: string
-    title:
-      type: string
-    link:
-      type: string
-    book_image_url:
-      type: string
-    book_small_image_url:
-      type: string
-    book_medium_image_url:
-      type: string
-    book_large_image_url:
-      type: string
-    book_description:
-      type: string
-    author_name:
-      type: string
-    isbn:
-      type: string
-    user_name:
-      type: string
-    user_rating:
-      type: string
-    user_read_at:
-      type: string
-    user_date_added:
-      type: string
-    user_date_created:
-      type: string
-    user_shelves:
-      type: string
-    user_review:
-      type: string
-    average_rating:
-      type: string
-    book_published:
-      type: string
-    description_html:
-      type: string
-    status:
-      type: string
-    updated_at:
-      type: string
-    book_title:
-      type: string
-    series_name:
-      type: string
-    series_number:
-      type: string
-    tone:
-      type: string
-    flavor:
-      type: string
-    trope:
-      type: string
-    library_hold_status_tuscaloosa_ebook:
-      type: string
-    library_hold_status_tuscaloosa_audio:
-      type: string
-    library_hold_status_seattle_ebook:
-      type: string
-    library_hold_status_seattle_audio:
-      type: string
-    library_hold_status_camellia_ebook:
-      type: string
-    library_hold_status_camellia_audio:
-      type: string
-    ku_availability:
-      type: string
-    hoopla_audio_available:
-      type: string
-    hoopla_ebook_available:
-      type: string
-    availability_source:
-      type: string
-    ku_expires_on:
-      type: string
-    pages_source:
-      type: string
-    next_release_date:
-      type: string
-    hype_flag:
-      type: string
-    queue_position:
-      type: string
-    queue_priority:
-      type: string
-    liked:
-      type: string
-    disliked:
-      type: string
-    extras:
-      type: string
-    notes:
-      type: string
-    rating_scale_tag:
-      type: string
-    inferred_score:
-      type: string
-    goal_year:
-      type: string
-  required:
-    - goodreads_id
               properties:
                 goodreads_id:
                   type: string
+              required:
+              - goodreads_id
+              type: object
+        required: true
       responses:
         '200':
-          description: Book deleted successfully
-
+          description: Successful deletion
+      summary: DELETE request to /api/delete_book
   /api/fetch_books:
     post:
-      summary: Fetch all or filtered books from Firebase
-      operationId: fetchBooks
+      operationId: api_fetch_books
       requestBody:
-        required: false
         content:
           application/json:
-            schema:
-  type: object
-  properties:
-    guid:
-      type: string
-    goodreads_id:
-      type: string
-    Pubdate:
-      type: string
-    title:
-      type: string
-    link:
-      type: string
-    book_image_url:
-      type: string
-    book_small_image_url:
-      type: string
-    book_medium_image_url:
-      type: string
-    book_large_image_url:
-      type: string
-    book_description:
-      type: string
-    author_name:
-      type: string
-    isbn:
-      type: string
-    user_name:
-      type: string
-    user_rating:
-      type: string
-    user_read_at:
-      type: string
-    user_date_added:
-      type: string
-    user_date_created:
-      type: string
-    user_shelves:
-      type: string
-    user_review:
-      type: string
-    average_rating:
-      type: string
-    book_published:
-      type: string
-    description_html:
-      type: string
-    status:
-      type: string
-    updated_at:
-      type: string
-    book_title:
-      type: string
-    series_name:
-      type: string
-    series_number:
-      type: string
-    tone:
-      type: string
-    flavor:
-      type: string
-    trope:
-      type: string
-    library_hold_status_tuscaloosa_ebook:
-      type: string
-    library_hold_status_tuscaloosa_audio:
-      type: string
-    library_hold_status_seattle_ebook:
-      type: string
-    library_hold_status_seattle_audio:
-      type: string
-    library_hold_status_camellia_ebook:
-      type: string
-    library_hold_status_camellia_audio:
-      type: string
-    ku_availability:
-      type: string
-    hoopla_audio_available:
-      type: string
-    hoopla_ebook_available:
-      type: string
-    availability_source:
-      type: string
-    ku_expires_on:
-      type: string
-    pages_source:
-      type: string
-    next_release_date:
-      type: string
-    hype_flag:
-      type: string
-    queue_position:
-      type: string
-    queue_priority:
-      type: string
-    liked:
-      type: string
-    disliked:
-      type: string
-    extras:
-      type: string
-    notes:
-      type: string
-    rating_scale_tag:
-      type: string
-    inferred_score:
-      type: string
-    goal_year:
-      type: string
-  required:
-    - goodreads_id
+            schema: *id001
+        required: true
       responses:
         '200':
-          description: Books retrieved successfully
-
+          description: Successful response
+      summary: POST request to /api/fetch_books
   /api/search_books:
     post:
-      summary: Search for a book by title, author, or other fields
-      operationId: searchBooks
+      operationId: api_search_books
       requestBody:
-        required: true
         content:
           application/json:
-            schema:
-  type: object
-  properties:
-    guid:
-      type: string
-    goodreads_id:
-      type: string
-    Pubdate:
-      type: string
-    title:
-      type: string
-    link:
-      type: string
-    book_image_url:
-      type: string
-    book_small_image_url:
-      type: string
-    book_medium_image_url:
-      type: string
-    book_large_image_url:
-      type: string
-    book_description:
-      type: string
-    author_name:
-      type: string
-    isbn:
-      type: string
-    user_name:
-      type: string
-    user_rating:
-      type: string
-    user_read_at:
-      type: string
-    user_date_added:
-      type: string
-    user_date_created:
-      type: string
-    user_shelves:
-      type: string
-    user_review:
-      type: string
-    average_rating:
-      type: string
-    book_published:
-      type: string
-    description_html:
-      type: string
-    status:
-      type: string
-    updated_at:
-      type: string
-    book_title:
-      type: string
-    series_name:
-      type: string
-    series_number:
-      type: string
-    tone:
-      type: string
-    flavor:
-      type: string
-    trope:
-      type: string
-    library_hold_status_tuscaloosa_ebook:
-      type: string
-    library_hold_status_tuscaloosa_audio:
-      type: string
-    library_hold_status_seattle_ebook:
-      type: string
-    library_hold_status_seattle_audio:
-      type: string
-    library_hold_status_camellia_ebook:
-      type: string
-    library_hold_status_camellia_audio:
-      type: string
-    ku_availability:
-      type: string
-    hoopla_audio_available:
-      type: string
-    hoopla_ebook_available:
-      type: string
-    availability_source:
-      type: string
-    ku_expires_on:
-      type: string
-    pages_source:
-      type: string
-    next_release_date:
-      type: string
-    hype_flag:
-      type: string
-    queue_position:
-      type: string
-    queue_priority:
-      type: string
-    liked:
-      type: string
-    disliked:
-      type: string
-    extras:
-      type: string
-    notes:
-      type: string
-    rating_scale_tag:
-      type: string
-    inferred_score:
-      type: string
-    goal_year:
-      type: string
-  required:
-    - goodreads_id
+            schema: *id001
+        required: true
       responses:
         '200':
-          description: Matching books returned
-
+          description: Successful response
+      summary: POST request to /api/search_books
   /api/sync_rss:
     post:
-      summary: Sync finished books from Goodreads RSS feed
-      operationId: syncRSS
-      responses:
-        '200':
-          description: RSS sync triggered
-
-  /api/check_library_holds:
-    post:
-      summary: Check availability across library and subscription sources
-      operationId: checkLibraryHolds
+      operationId: api_sync_rss
       requestBody:
-        required: false
         content:
           application/json:
-            schema:
-  type: object
-  properties:
-    guid:
-      type: string
-    goodreads_id:
-      type: string
-    Pubdate:
-      type: string
-    title:
-      type: string
-    link:
-      type: string
-    book_image_url:
-      type: string
-    book_small_image_url:
-      type: string
-    book_medium_image_url:
-      type: string
-    book_large_image_url:
-      type: string
-    book_description:
-      type: string
-    author_name:
-      type: string
-    isbn:
-      type: string
-    user_name:
-      type: string
-    user_rating:
-      type: string
-    user_read_at:
-      type: string
-    user_date_added:
-      type: string
-    user_date_created:
-      type: string
-    user_shelves:
-      type: string
-    user_review:
-      type: string
-    average_rating:
-      type: string
-    book_published:
-      type: string
-    description_html:
-      type: string
-    status:
-      type: string
-    updated_at:
-      type: string
-    book_title:
-      type: string
-    series_name:
-      type: string
-    series_number:
-      type: string
-    tone:
-      type: string
-    flavor:
-      type: string
-    trope:
-      type: string
-    library_hold_status_tuscaloosa_ebook:
-      type: string
-    library_hold_status_tuscaloosa_audio:
-      type: string
-    library_hold_status_seattle_ebook:
-      type: string
-    library_hold_status_seattle_audio:
-      type: string
-    library_hold_status_camellia_ebook:
-      type: string
-    library_hold_status_camellia_audio:
-      type: string
-    ku_availability:
-      type: string
-    hoopla_audio_available:
-      type: string
-    hoopla_ebook_available:
-      type: string
-    availability_source:
-      type: string
-    ku_expires_on:
-      type: string
-    pages_source:
-      type: string
-    next_release_date:
-      type: string
-    hype_flag:
-      type: string
-    queue_position:
-      type: string
-    queue_priority:
-      type: string
-    liked:
-      type: string
-    disliked:
-      type: string
-    extras:
-      type: string
-    notes:
-      type: string
-    rating_scale_tag:
-      type: string
-    inferred_score:
-      type: string
-    goal_year:
-      type: string
-  required:
-    - goodreads_id
+            schema: *id001
+        required: true
       responses:
         '200':
-          description: Availability fields updated
+          description: Successful response
+      summary: POST request to /api/sync_rss
+  /api/update_book:
+    patch:
+      operationId: api_update_book
+      requestBody:
+        content:
+          application/json:
+            schema: *id001
+        required: true
+      responses:
+        '200':
+          description: Successful response
+      summary: PATCH request to /api/update_book
+servers:
+- url: https://book-gpt-api.vercel.app
