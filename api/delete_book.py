@@ -64,3 +64,7 @@ class handler(BaseHTTPRequestHandler):
                 "status": "error",
                 "message": str(e)
             }).encode())
+
+    def do_DELETE(self):
+        # Treat DELETE the same as POST for backward compatibility
+        return self.do_POST()
