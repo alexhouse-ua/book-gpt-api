@@ -52,6 +52,23 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             logger.info("Writing new book record to Firebase.")
+            # Initialize all expected fields to empty string if missing
+            default_fields = [
+                "tone", "trope", "flavor", "hype_flag",
+                "availability_source",
+                "library_hold_status_tuscaloosa_ebook", "library_hold_status_tuscaloosa_audio",
+                "library_hold_status_camellia_ebook", "library_hold_status_camellia_audio",
+                "library_hold_status_seattle_ebook", "library_hold_status_seattle_audio",
+                "hoopla_ebook_available", "hoopla_audio_available",
+                "ku_availability",
+                "liked", "disliked",
+                "rating_scale_tag", "inferred_score",
+                "next_release_date", "goal_year",
+                "extras", "queue_position"
+            ]
+            for field in default_fields:
+                if field not in data:
+                    data[field] = ""
             ref.set(data)
             logger.info("Book %s added successfully with fields:\n%s", book_id, json.dumps(data, indent=2))
 
