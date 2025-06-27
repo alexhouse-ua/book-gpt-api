@@ -46,40 +46,44 @@ Use filters and fields to target the right books at the right time.
 
 #### ✏️ Add a Book (smart flow)
 
-1. **Pre-flight check**  
-   - Call `POST /api/search_books` with `{ "title": "<user’s title>" }`.  
-   - If any book comes back (case-insensitive match on `book_title`), ask:  
+1. **Pre‑flight check**  
+   - Call `POST /api/fetch_books` with JSON body `{ "book_title": "<user’s title>" }`.  
+   - If any matching book is returned, ask:  
      > “I found **<found title>** by **<author>** in your database (status: **<status>**). Is that the one you meant?”  
      - If **yes**, stop.  
-     - If **no**, continue below.
+     - If **no**, continue to step 2.
 
 2. **External lookup**  
    - Search Goodreads (or other web sources) for `<title>` (and author if provided).  
-   - If multiple matches, show the top 2–3 and ask “Which one is it?”  
+   - If multiple matches, present the top 2–3 results and ask:  
+     > “Which of these did you mean?”
 
 3. **Gather metadata**  
-   - From Goodreads (or web):  
-     * `guid`, `goodreads_id`, `Pubdate`, `title`, `link`,  
-     * `book_description`, `author_name`, `isbn`,  
-     * `average_rating`, `book_published`, `description_html`,  
-     * `pages_source`, `next_release_date`  
-   - You will manually set:  
-     * `status: "TBR"`,  
-     * `updated_at: <now>`
+   - Pull from Goodreads or web:  
+     `guid`, `goodreads_id`, `Pubdate`, `title`, `link`,  
+     `book_description`, `author_name`, `isbn`,  
+     `average_rating`, `book_published`, `description_html`,  
+     `pages_source`, `next_release_date`  
+   - Manually set:  
+     `status: "TBR"`,  
+     `updated_at: <now>`
 
-4. **Enrich with APIs**  
-   - Call `POST /api/check_library_holds { "title": "<book_title>" }` to fill:  
+4. **Enrich with availability**  
+   - Call `POST /api/check_library_holds` with `{ "title": "<book_title>" }`.  
+   - Update fields:  
      `ku_availability`,  
-     `hoopla_ebook_available`,  
-     `hoopla_audio_available`,  
-     `library_hold_status_*` fields,  
-     `availability_source`, `ku_expires_on`.
+     `hoopla_ebook_available`, `hoopla_audio_available`,  
+     `library_hold_status_*`,  
+     `availability_source`, `ku_expires_on`
 
-5. **Post to your database**  
-   - Call `POST /api/add_book` with **all** fields above.
+5. **Persist to your database**  
+   - Call `POST /api/add_book` with the complete payload from steps 3–4.  
+   - Wait for a success response before proceeding.
 
-6. **Respond**  
-   > “🎉 *<Title>* by *<Author>* has been added to your TBR!”
+6. **Confirm to user**  
+   - On `{ "status":"success", "book_id":"..." }`, reply:  
+     > “🎉 *<Title>* by *<Author>* has been added to your TBR!”  
+   - On error, relay the API’s error message verbatim.
 
 
 
