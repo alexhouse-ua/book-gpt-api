@@ -3,6 +3,9 @@ import json
 import firebase_admin
 from firebase_admin import credentials, db
 import os
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -27,19 +30,22 @@ class handler(BaseHTTPRequestHandler):
 
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
-            data = json.loads(body)
-            query = data.get("query", "").lower()
-
-            if not query:
-                raise ValueError("Missing search query.")
+            data = json.loads(body) if body else {}
+            if not data:
+                raise ValueError("Missing search filters.")
+            logger.info(f"search_books filters: {data}")
 
             books = db.reference("/books").get() or {}
             results = []
-
             for book_id, book in books.items():
-                book_title = book.get("book_title", "").lower()
-                author_name = book.get("author_name", "").lower()
-                if query in book_title or query in author_name:
+                match = True
+                for key, value in data.items():
+                    field_val = str(book.get(key, "")).lower()
+                    if str(value).lower() not in field_val:
+                        match = False
+                        break
+                if match:
+                    book["goodreads_id"] = book_id
                     results.append(book)
 
             self.send_response(200)
@@ -51,6 +57,7 @@ class handler(BaseHTTPRequestHandler):
             }).encode())
 
         except Exception as e:
+            logger.exception(e)
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
             self.end_headers()

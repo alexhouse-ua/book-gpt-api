@@ -3,6 +3,9 @@ import json
 import firebase_admin
 from firebase_admin import credentials, db
 import os
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -27,18 +30,24 @@ class handler(BaseHTTPRequestHandler):
 
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
+            logger.info(f"delete_book request body: {body.decode('utf-8')}")
             data = json.loads(body)
 
             book_id = data.get("goodreads_id")
+            logger.info(f"Attempting to delete book: {book_id}")
             if not book_id:
                 raise ValueError("Missing 'goodreads_id' in request.")
 
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
+                logger.info(f"Book {book_id} found. Deleting.")
                 ref.delete()
                 response = {"status": "success", "message": "Book deleted.", "book_id": book_id}
+                logger.info(f"delete_book response: {response}")
             else:
+                logger.info(f"Book {book_id} not found.")
                 response = {"status": "error", "message": "Book not found.", "book_id": book_id}
+                logger.info(f"delete_book response: {response}")
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -46,6 +55,8 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(response).encode())
 
         except Exception as e:
+            logger.error(f"Error in delete_book: {e}")
+            logger.exception(e)
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
             self.end_headers()

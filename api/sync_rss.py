@@ -9,9 +9,11 @@ from firebase_admin import credentials, db
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+logger.info("sync_rss handler initialized")
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        logger.info("sync_rss.do_GET called")
         try:
             # Firebase Setup
             if not firebase_admin._apps:
@@ -35,9 +37,11 @@ class handler(BaseHTTPRequestHandler):
             # Fetch RSS Feed
             RSS_URL = "https://www.goodreads.com/review/list_rss/175732651?key=pieaUmxpwAFnXedFdGNPvOcgxfZ_Eme21zt09hpH0zzCVl7s&shelf=read"
             feed = feedparser.parse(RSS_URL)
+            logger.info(f"Fetched {len(feed.entries)} entries from RSS")
             new_books = []
 
             for entry in feed.entries:
+                logger.info(f"Processing RSS entry: {entry.get('guid', entry.id)}")
                 try:
                     book_id = entry.get("book_id") or entry.id.rsplit("/", 1)[-1]
                     full_title = entry.title
@@ -85,12 +89,14 @@ class handler(BaseHTTPRequestHandler):
 
                     ref = db.reference(f"/books/{book_id}")
                     if not ref.get():
+                        logger.info(f"Adding new book: {book_title} (ID: {book_id})")
                         ref.set(book_data)
                         new_books.append(book_title)
                 except Exception as entry_error:
                     logger.error(f"Error processing entry: {entry.get('title', 'Unknown')}")
                     logger.exception(entry_error)
 
+            logger.info(f"Total new books added: {len(new_books)}")
             # Respond
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -111,4 +117,5 @@ class handler(BaseHTTPRequestHandler):
                 "message": str(e)
             }).encode())
     def do_POST(self):
+        logger.info("sync_rss.do_POST called, delegating to do_GET")
         self.do_GET()

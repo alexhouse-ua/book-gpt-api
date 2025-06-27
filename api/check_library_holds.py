@@ -7,6 +7,10 @@ from bs4 import BeautifulSoup
 import firebase_admin
 import time
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Firebase initialization
 if not firebase_admin._apps:
     cred = credentials.Certificate({
@@ -78,6 +82,7 @@ class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
+        logger.info(f"check_library_holds request body: {body.decode('utf-8')}")
         request_data = json.loads(body)
         filter_title = request_data.get("title")
 
@@ -85,9 +90,11 @@ class handler(BaseHTTPRequestHandler):
         all_books = books_ref.get() or {}
         updated_books = {}
 
+        logger.info(f"Filtering for title: {filter_title}")
         for book_id, book_data in all_books.items():
             title = book_data.get("book_title", "")
             author = book_data.get("author_name", "")
+            logger.info(f"Checking availability for '{title}' by {author}")
             if filter_title and filter_title.lower() not in title.lower():
                 continue
 
@@ -103,13 +110,16 @@ class handler(BaseHTTPRequestHandler):
                     "hoopla_audio_available": "Yes" if hoopla_audio else "No",
                     "ku_availability": "Yes" if ku_available else "No"
                 }
-
+                logger.info(f"Updating book {book_id} with: {update_data}")
                 books_ref.child(book_id).update(update_data)
                 updated_books[book_id] = update_data
 
             except Exception as e:
+                logger.error(f"Error updating availability for {book_id}: {e}")
+                logger.exception(e)
                 updated_books[book_id] = {"error": str(e)}
 
+        logger.info(f"check_library_holds completed with updates: {updated_books}")
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()

@@ -3,6 +3,9 @@ import json
 import os
 import firebase_admin
 from firebase_admin import credentials, db
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Firebase initialization (only if not already initialized)
 if not firebase_admin._apps:
@@ -26,6 +29,7 @@ class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
+        logger.info("add_book called with body: %s", body.decode("utf-8"))
         try:
             data = json.loads(body)
             book_id = data.get("goodreads_id")
@@ -33,6 +37,7 @@ class handler(BaseHTTPRequestHandler):
             if not book_id:
                 raise ValueError("Missing 'goodreads_id'")
 
+            logger.info("Checking existence of book_id: %s", book_id)
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
                 self.send_response(409)
@@ -42,12 +47,14 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             ref.set(data)
+            logger.info("Book %s added successfully", book_id)
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({"status": "success", "message": "Book added.", "book_id": book_id}).encode())
         except Exception as e:
+            logger.exception("Error in add_book:")
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
             self.end_headers()

@@ -3,11 +3,16 @@ import json
 import firebase_admin
 from firebase_admin import credentials, db
 import os
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        logger.info("update_book: Received request with headers: %s", dict(self.headers))
         try:
             # Initialize Firebase
+            logger.info("update_book: Initializing Firebase app")
             if not firebase_admin._apps:
                 cred = credentials.Certificate({
                     "type": os.environ["FIREBASE_TYPE"],
@@ -28,6 +33,7 @@ class handler(BaseHTTPRequestHandler):
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
             data = json.loads(body)
+            logger.info("update_book: Parsed data: %s", data)
 
             book_id = data.get("goodreads_id")
             updates = data.get("updates")
@@ -37,9 +43,11 @@ class handler(BaseHTTPRequestHandler):
 
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
+                logger.info("update_book: Book %s found, applying updates: %s", book_id, updates)
                 ref.update(updates)
                 response = {"status": "success", "message": "Book updated.", "book_id": book_id}
             else:
+                logger.warning("update_book: Book %s not found in database", book_id)
                 response = {"status": "error", "message": "Book not found.", "book_id": book_id}
 
             self.send_response(200)
@@ -48,6 +56,7 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(response).encode())
 
         except Exception as e:
+            logger.error("update_book: Exception occurred", exc_info=True)
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
             self.end_headers()

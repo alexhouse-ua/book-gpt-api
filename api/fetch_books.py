@@ -38,6 +38,7 @@ class handler(BaseHTTPRequestHandler):
                 filters = json.loads(body) if body else {}
             except json.JSONDecodeError:
                 filters = {}
+            logger.info(f"fetch_books called with filters: {filters}")
 
             # Retrieve all books
             ref = db.reference("/books")
@@ -56,6 +57,7 @@ class handler(BaseHTTPRequestHandler):
                 if match:
                     book_data["goodreads_id"] = book_id
                     results.append(book_data)
+            logger.info(f"fetch_books returning {len(results)} books matching filters")
 
             # Return filtered results
             self.send_response(200)
