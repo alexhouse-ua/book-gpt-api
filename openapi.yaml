@@ -6,6 +6,7 @@ paths:
   /api/add_book:
     post:
       operationId: api_add_book
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -126,6 +127,7 @@ paths:
   /api/check_library_holds:
     post:
       operationId: api_check_library_holds
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -138,6 +140,7 @@ paths:
   /api/delete_book:
     delete:
       operationId: api_delete_book
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -156,6 +159,7 @@ paths:
   /api/fetch_books:
     post:
       operationId: api_fetch_books
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -168,6 +172,7 @@ paths:
   /api/search_books:
     post:
       operationId: api_search_books
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -180,6 +185,7 @@ paths:
   /api/sync_rss:
     post:
       operationId: api_sync_rss
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
@@ -192,6 +198,7 @@ paths:
   /api/update_book:
     patch:
       operationId: api_update_book
+      x-openai-isConsequential: false
       requestBody:
         content:
           application/json:
