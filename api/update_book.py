@@ -71,3 +71,7 @@ class handler(BaseHTTPRequestHandler):
                 "status": "error",
                 "message": str(e)
             }).encode())
+
+    def do_PATCH(self):
+        logger.info("update_book: do_PATCH called, delegating to do_POST")
+        self.do_POST()
