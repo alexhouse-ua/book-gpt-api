@@ -39,7 +39,7 @@ class handler(BaseHTTPRequestHandler):
 
             for entry in feed.entries:
                 try:
-                    book_id = entry.id.split("book/show/")[-1].split("?")[0]
+                    book_id = entry.get("book_id") or entry.id.rsplit("/", 1)[-1]
                     full_title = entry.title
                     title_split = full_title.split(" (")
                     book_title = title_split[0].strip()
