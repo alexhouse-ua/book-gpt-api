@@ -39,9 +39,12 @@ class handler(BaseHTTPRequestHandler):
             book_id = data.get("goodreads_id")
             updates = data.get("updates")
 
+            if not updates:
+                updates = {k: v for k, v in data.items() if k != "goodreads_id"}
+
             if not book_id or not updates:
                 logger.warning("update_book: Missing required fields. book_id: %s, updates: %s", book_id, updates)
-                raise ValueError("Missing 'goodreads_id' or 'updates' in request.")
+                raise ValueError("Missing 'goodreads_id' or updates in request.")
 
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
