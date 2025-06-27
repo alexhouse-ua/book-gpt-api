@@ -1,4 +1,5 @@
-from firebase_admin import credentials, db, initialize_app
+import firebase_admin
+from firebase_admin import credentials, db
 import os
 
 # Initialize Firebase
@@ -15,7 +16,7 @@ if not firebase_admin._apps:
         "auth_provider_x509_cert_url": os.environ["FIREBASE_AUTH_PROVIDER_X509_CERT_URL"],
         "client_x509_cert_url": os.environ["FIREBASE_CLIENT_CERT_URL"]
     })
-    initialize_app(cred, {
+    firebase_admin.initialize_app(cred, {
         'databaseURL': os.environ["FIREBASE_DB_URL"]
     })
 
