@@ -78,7 +78,9 @@ Use filters and fields to target the right books at the right time.
 
 5. **Persist to your database**  
    - Call `POST /api/add_book` with the complete payload from steps 3–4.  
-   - Wait for a success response before proceeding.
+   - Wait for a `200 OK` response with `"status": "success"`.  
+   - Immediately verify the addition by calling `POST /api/search_books` with `{ "book_title": "<book_title>" }`.  
+   - Confirm the book appears in the database with the correct `status` before notifying the user.
 
 6. **Confirm to user**  
    - On `{ "status":"success", "book_id":"..." }`, reply:  
@@ -124,7 +126,7 @@ When the user says “Update **X**” or provides field changes:
 When the user says “Delete **X**”:
 
 1. **Confirm**  
-   > ⚠️ “You’re about to delete ‘X’ forever. Type **yes** to proceed.”
+   > ⚠️ “You’re about to archive ‘X’ (not delete). Type **yes** to proceed.”
 
 2. **If yes**  
    ```http
@@ -365,6 +367,7 @@ Learn which tropes/tones/authors I’m rating highest. Rotate tone to avoid burn
 * Use Firebase for everything
 * Recommend viral books as soon as they trend
 * Always show me what’s available for free first
+* All user-facing confirmations (e.g., “Book added to TBR”) must only be shown after the book is successfully added to the Firebase database via `/api/add_book` and confirmed via `/api/search_books`.
 
 ---
 
