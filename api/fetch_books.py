@@ -48,7 +48,9 @@ class handler(BaseHTTPRequestHandler):
             for book_id, book_data in all_books.items():
                 match = True
                 for key, value in filters.items():
-                    if str(book_data.get(key, "")).lower() != str(value).lower():
+                    book_value = str(book_data.get(key, ""))
+                    # Case-insensitive substring match
+                    if str(value).lower() not in book_value.lower():
                         match = False
                         break
                 if match:
