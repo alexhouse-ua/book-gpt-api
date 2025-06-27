@@ -32,6 +32,11 @@ class handler(BaseHTTPRequestHandler):
         logger.info("add_book called with body: %s", body.decode("utf-8"))
         try:
             data = json.loads(body)
+            # Validate required fields
+            required_fields = ["goodreads_id", "title", "author_name", "status"]
+            for field in required_fields:
+                if not data.get(field):
+                    raise ValueError(f"Missing required field: '{field}'")
             book_id = data.get("goodreads_id")
 
             if not book_id:
@@ -46,8 +51,9 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "error", "message": "Book already exists."}).encode())
                 return
 
+            logger.info("Writing new book record to Firebase.")
             ref.set(data)
-            logger.info("Book %s added successfully", book_id)
+            logger.info("Book %s added successfully with fields:\n%s", book_id, json.dumps(data, indent=2))
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')

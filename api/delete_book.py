@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
-            # Initialize Firebase
             if not firebase_admin._apps:
                 cred = credentials.Certificate({
                     "type": os.environ["FIREBASE_TYPE"],
@@ -34,20 +33,18 @@ class handler(BaseHTTPRequestHandler):
             data = json.loads(body)
 
             book_id = data.get("goodreads_id")
-            logger.info(f"Attempting to delete book: {book_id}")
+            logger.info(f"Archiving book: {book_id}")
             if not book_id:
                 raise ValueError("Missing 'goodreads_id' in request.")
 
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
-                logger.info(f"Book {book_id} found. Deleting.")
-                ref.delete()
-                response = {"status": "success", "message": "Book deleted.", "book_id": book_id}
-                logger.info(f"delete_book response: {response}")
+                ref.update({"status": "Archived"})
+                response = {"status": "success", "message": "Book archived instead of deleted.", "book_id": book_id}
+                logger.info(f"Book {book_id} archived successfully.")
             else:
-                logger.info(f"Book {book_id} not found.")
                 response = {"status": "error", "message": "Book not found.", "book_id": book_id}
-                logger.info(f"delete_book response: {response}")
+                logger.info(f"Book {book_id} not found.")
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')

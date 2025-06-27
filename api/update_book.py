@@ -33,18 +33,25 @@ class handler(BaseHTTPRequestHandler):
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
             data = json.loads(body)
+            logger.info("update_book: Raw body: %s", body.decode("utf-8"))
             logger.info("update_book: Parsed data: %s", data)
 
             book_id = data.get("goodreads_id")
             updates = data.get("updates")
 
             if not book_id or not updates:
+                logger.warning("update_book: Missing required fields. book_id: %s, updates: %s", book_id, updates)
                 raise ValueError("Missing 'goodreads_id' or 'updates' in request.")
 
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
+                current_data = ref.get()
+                logger.info("update_book: Current values: %s", json.dumps(current_data, indent=2))
+                logger.info("update_book: Applying updates: %s", json.dumps(updates, indent=2))
                 logger.info("update_book: Book %s found, applying updates: %s", book_id, updates)
                 ref.update(updates)
+                updated_data = ref.get()
+                logger.info("update_book: Updated values: %s", json.dumps(updated_data, indent=2))
                 response = {"status": "success", "message": "Book updated.", "book_id": book_id}
             else:
                 logger.warning("update_book: Book %s not found in database", book_id)
