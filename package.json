@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "vercel": "^44.2.6"
+  },
+  "scripts": {
+    "vercel-build": "mkdir -p .vercel/output/static && cp api/*.txt .vercel/output/static/"
   }
 }

@@ -8,12 +8,10 @@
   ],
   "routes": [
     {
-      "src": "/(.*\\.txt)",
-      "dest": "/public/$1"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "api/$1.py"
     }
-  ]
+  ],
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".vercel/output"
 }
