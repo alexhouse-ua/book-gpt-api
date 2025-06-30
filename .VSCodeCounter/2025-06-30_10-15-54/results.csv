@@ -1,0 +1,23 @@
+"filename", "language", "Python", "YAML", "Properties", "toml", "Markdown", "pip requirements", "JSON", "comment", "blank", "total"
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/.env", "Properties", 0, 0, 11, 0, 0, 0, 0, 0, 3, 14
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/.github/workflows/sync_rss.yml", "YAML", 0, 11, 0, 0, 0, 0, 0, 1, 2, 14
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/Pipfile", "toml", 0, 0, 0, 8, 0, 0, 0, 0, 3, 11
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/README.md", "Markdown", 0, 0, 0, 0, 59, 0, 0, 0, 30, 89
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/add_book.py", "Python", 75, 0, 0, 0, 0, 0, 0, 3, 6, 84
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/backfill_empty_fields.py", "Python", 45, 0, 0, 0, 0, 0, 0, 1, 6, 52
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/backfill_enrichment.py", "Python", 95, 0, 0, 0, 0, 0, 0, 1, 18, 114
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/check_library_holds.py", "Python", 104, 0, 0, 0, 0, 0, 0, 2, 20, 126
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/delete_book.py", "Python", 59, 0, 0, 0, 0, 0, 0, 1, 7, 67
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/fetch_books.py", "Python", 63, 0, 0, 0, 0, 0, 0, 7, 8, 78
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/instructions.py", "Python", 14, 0, 0, 0, 0, 0, 0, 0, 1, 15
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/print_firebase_books.py", "Python", 41, 0, 0, 0, 0, 0, 0, 2, 6, 49
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/search_books.py", "Python", 61, 0, 0, 0, 0, 0, 0, 1, 5, 67
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/sync_rss.py", "Python", 108, 0, 0, 0, 0, 0, 0, 4, 10, 122
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/api/update_book.py", "Python", 70, 0, 0, 0, 0, 0, 0, 1, 9, 80
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/firebase_credentials.json", "JSON", 0, 0, 0, 0, 0, 0, 13, 0, 1, 14
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/openapi.yaml", "YAML", 0, 212, 0, 0, 0, 0, 0, 0, 1, 213
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/package-lock.json", "JSON", 0, 0, 0, 0, 0, 0, 2874, 0, 1, 2875
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/package.json", "JSON", 0, 0, 0, 0, 0, 0, 5, 0, 1, 6
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/requirements.txt", "pip requirements", 0, 0, 0, 0, 0, 5, 0, 0, 0, 5
+"/Users/alhouse2/Documents/GitHub/book-gpt-api/vercel.json", "JSON", 0, 0, 0, 0, 0, 0, 19, 0, 0, 19
+"Total", "-", 735, 223, 11, 8, 59, 5, 2911, 24, 138, 4114

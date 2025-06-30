@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
+load_dotenv()
 from http.server import BaseHTTPRequestHandler
 import json
 import os
 import logging
+
 import firebase_admin
 from firebase_admin import credentials, db
 from bs4 import BeautifulSoup
@@ -57,6 +60,7 @@ def scrape_trope_and_tone(title, author):
                 continue
 
         result_text = result_text.lower()
+        logger.info(f"Scraped text sample for '{title}' by {author}: {result_text[:1000]}")
 
         tropes = []
         tones = []
