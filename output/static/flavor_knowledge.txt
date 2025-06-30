@@ -1,0 +1,230 @@
+# 📚 Book Genres & Sub-genres
+
+---
+
+## 1. Fantasy
+- Alternate History
+- Arcanepunk
+- Arthurian Fantasy
+- Castle Fantasy
+- Christian Fantasy
+- Comic / Humorous Fantasy
+- Dark Fantasy
+- Fairy-Tale Retellings
+- Fantasy of Manners
+- Gaslamp Fantasy
+- Grimdark
+- High / Epic Fantasy
+- Historical Fantasy
+- Isekai / Portal Fantasy
+- Low / Mundane Fantasy
+- Mythic / Mythopoeia / Mythpunk
+- Paranormal Fantasy
+- Sword & Sorcery
+- Urban Fantasy
+- Wuxia
+- Young Adult Fantasy
+
+---
+
+## 2. Science Fiction
+- AI / Robotics
+- Alternate History
+- Apocalyptic
+- Biopunk
+- Climate Fiction (Cli‑Fi)
+- Dieselpunk
+- First Contact
+- Hard Sci‑Fi
+- Libertarian / Social Sci‑Fi
+- Military Sci‑Fi
+- Nanopunk
+- Post‑Apocalyptic
+- Parallel / Multiple Universes
+- Soft Sci‑Fi
+- Space Opera
+- Space Western
+- Steampunk
+- Techno‑thriller
+- Time Travel
+- Utopian / Dystopian
+
+---
+
+## 3. Mystery & Crime
+- Amateur Sleuth
+- Book Club Mystery
+- Caper / Heist
+- Cold Case
+- Cozy Mystery
+- Detective / Police Procedural
+- Forensic Mystery
+- Hardboiled / Noir
+- Historical Mystery
+- Howdunit
+- Locked-Room Mystery
+- Legal Thriller
+- Mystery Thriller
+- Serial Killer / Psychological Crime
+- Spy-Fi / Spy Thriller
+- Whodunit
+
+---
+
+## 4. Thriller & Suspense
+- Action Thriller
+- Conspiracy Thriller
+- Domestic Thriller
+- Financial Thriller
+- Legal Thriller
+- Medical Thriller
+- Political Thriller
+- Psychological Thriller
+- Spy Thriller
+- Techno‑Thriller
+
+---
+
+## 5. Horror
+- Body Horror
+- Cosmic / Lovecraftian Horror
+- Creature Horror
+- Gothic Horror
+- Occult Horror
+- Paranormal Horror
+- Psychological Horror
+- Slasher
+- Splatterpunk
+- Survival Horror
+- Supernatural Horror
+- Weird Horror
+
+---
+
+## 6. Romance
+- Contemporary Romance
+- Christian / Inspirational Romance
+- Dark Romance
+- Erotic Romance
+- Fantasy Romance (Romantasy)
+- Friendship to Lovers
+- Historical Romance (Regency, Medieval, Highlander)
+- LGBTQ+ Romance (Gay, Lesbian, Bisexual, Transgender, Non-binary)
+- Marriage of Convenience
+- Medical Romance
+- Paranormal Romance
+- Regency Romance
+- Romantic Comedy
+- Romantic Suspense
+- Sci‑Fi Romance
+- Second-Chance Romance
+- Slow-Burn Romance
+- Insta‑Love
+- Enemies-to-Lovers
+- Gothic Romance
+
+---
+
+## 7. Action & Adventure
+- Espionage / Spy Adventure
+- Lost-World
+- Military Adventure
+- Nautical / Maritime Adventure
+- Picaresque
+- Robinsonade
+- Superhero Adventure
+- Swashbuckling
+- Treasure Hunt
+- Wilderness / Survival Adventure
+
+---
+
+## 8. Historical Fiction
+- Ancient Civilizations
+- Biographical Historical
+- Medieval
+- Renaissance
+- Regency
+- Victorian
+- Western Historical
+- Wartime Fiction
+
+---
+
+## 9. Literary / Mainstream Fiction
+- Experimental / Metafiction
+- Philosophical / Psychological
+- Social / Political
+- Character-driven
+- Stream-of-Consciousness
+- Bildungsroman / Coming-of-Age
+
+---
+
+## 10. Speculative Fiction (Umbrella)
+Includes hybrids and overlaps across Fantasy, Sci‑Fi, Horror, Supernatural, Alternate History, Dystopian/Utopian, Magical Realism, Weird Fiction
+
+- Magical Realism
+- Supernatural Fiction
+- Visionary / Metaphysical Fiction
+- Weird Fiction
+
+---
+
+## 11. Young Readers
+
+### Children’s
+- Picture Book
+- Early Reader
+- Middle Grade Adventure
+- Middle Grade Fantasy
+- Middle Grade Mystery
+- Animal Stories
+
+### Young Adult (YA)
+- YA Fantasy
+- YA Sci‑Fi
+- YA Romance
+- YA Mystery / Thriller
+- YA Contemporary
+- YA Dystopian
+- YA Coming-of-Age
+- YA LGBTQ+
+
+### New Adult (NA)
+- NA Contemporary
+- NA Romance
+- NA Fantasy
+- NA Coming-of-Age
+
+---
+
+## 12. Non-Fiction
+- Biography / Autobiography / Memoir
+- History (General, Military, Popular)
+- True Crime
+- Self‑Help / Personal Development
+- Health & Wellness
+- Travel & Nature
+- Popular Science
+- Economics & Business
+- Religion / Spirituality / Theology
+- Art & Photography
+- Cookbooks / Food & Drink
+- Essays & Criticism
+- Academic / Humanities & Social Sciences
+- Reference (Dictionaries, Encyclopedias)
+- Humor & Satire
+- Journalism / Political Commentary
+- Sports
+- Gardening / DIY / Lifestyle
+
+---
+
+## 13. Poetry & Drama
+- Epic / Narrative Poetry
+- Lyric / Free Verse / Formal (Sonnets, Haiku)
+- Tragedy
+- Comedy
+- Historical Drama
+- Modern Drama
