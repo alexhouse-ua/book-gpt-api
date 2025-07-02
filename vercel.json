@@ -1,4 +1,22 @@
 {
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": ".vercel/output"
+  "outputDirectory": ".vercel/output",
+  "version": 3,
+  "routes": [
+    { "handle": "filesystem" },
+
+    /* single consolidated maintenance function */
+    {
+      "src": "/internal/(.*)",
+      "dest": "/api/maintenance/[task].py",
+      "methods": ["GET", "POST"]
+    },
+
+    /* keep other public endpoints working */
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.py",
+      "methods": ["GET", "POST"]
+    }
+  ]
 }
