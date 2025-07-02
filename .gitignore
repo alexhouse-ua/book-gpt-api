@@ -1,1 +1,5 @@
-.vercel
+# Track build output
+.vercel/*
+!.vercel/output/
+!.vercel/output/**
+__pycache__/
