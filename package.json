@@ -2,6 +2,6 @@
   "name": "book-gpt-api",
   "version": "1.0.0",
   "dependencies": {
-    "vercel": "^44.2.6"
+    "vercel": "^32.0.1"
   }
 }
