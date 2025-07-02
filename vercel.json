@@ -1,16 +1,10 @@
 {
-  "version": 3,
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.py", "use": "@vercel/python" }
+  ],
   "routes": [
-    { "handle": "filesystem" },
-    {
-      "src": "/internal/(.*)",
-      "dest": "/api/maintenance/[task].py",
-      "methods": ["GET", "POST"]
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.py",
-      "methods": ["GET", "POST"]
-    }
+    { "src": "/internal/(.*)", "dest": "api/maintenance/[task].py" },
+    { "src": "/api/(.*)",      "dest": "api/$1.py" }
   ]
 }
