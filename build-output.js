@@ -11,10 +11,12 @@ fs.mkdirSync(functionsDir, { recursive: true });
 
 const routes = [];
 
-// Copy any .txt files from api to static (as previous script did)
-for (const file of fs.readdirSync('api')) {
-  if (file.endsWith('.txt')) {
-    fs.copyFileSync(path.join('api', file), path.join(staticDir, file));
+// Copy static knowledge and instruction files
+if (fs.existsSync('static')) {
+  for (const file of fs.readdirSync('static')) {
+    if (file.endsWith('.txt')) {
+      fs.copyFileSync(path.join('static', file), path.join(staticDir, file));
+    }
   }
 }
 
