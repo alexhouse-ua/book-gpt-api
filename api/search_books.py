@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 import os
 import logging
+import urllib.parse
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
@@ -40,6 +41,67 @@ class handler(BaseHTTPRequestHandler):
             for book_id, book in books.items():
                 match = True
                 for key, value in data.items():
+                    field_val = str(book.get(key, "")).lower()
+                    if str(value).lower() not in field_val:
+                        match = False
+                        break
+                if match:
+                    book["goodreads_id"] = book_id
+                    results.append(book)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "status": "success",
+                "results": results
+            }).encode())
+
+        except Exception as e:
+            logger.exception(e)
+            self.send_response(500)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "status": "error",
+                "message": str(e)
+            }).encode())
+
+    def do_GET(self):
+        """
+        Allow GET searches like:
+        /api/search_books?status=Finished&author_name=Stewart
+        """
+        try:
+            # Firebase init (same as POST)
+            if not firebase_admin._apps:
+                cred = credentials.Certificate({
+                    "type": os.environ["FIREBASE_TYPE"],
+                    "project_id": os.environ["FIREBASE_PROJECT_ID"],
+                    "private_key_id": os.environ["FIREBASE_PRIVATE_KEY_ID"],
+                    "private_key": os.environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n"),
+                    "client_email": os.environ["FIREBASE_CLIENT_EMAIL"],
+                    "client_id": os.environ["FIREBASE_CLIENT_ID"],
+                    "auth_uri": os.environ["FIREBASE_AUTH_URI"],
+                    "token_uri": os.environ["FIREBASE_TOKEN_URI"],
+                    "auth_provider_x509_cert_url": os.environ["FIREBASE_AUTH_PROVIDER_X509_CERT_URL"],
+                    "client_x509_cert_url": os.environ["FIREBASE_CLIENT_CERT_URL"]
+                })
+                firebase_admin.initialize_app(cred, {
+                    'databaseURL': os.environ["FIREBASE_DB_URL"]
+                })
+
+            parsed = urllib.parse.urlparse(self.path)
+            filters = {k: v[0] for k, v in urllib.parse.parse_qs(parsed.query).items()}
+            if not filters:
+                raise ValueError("Missing search filters.")
+            logger.info(f"search_books GET filters: {filters}")
+
+            books = db.reference("/books").get() or {}
+            results = []
+            for book_id, book in books.items():
+                match = True
+                for key, value in filters.items():
                     field_val = str(book.get(key, "")).lower()
                     if str(value).lower() not in field_val:
                         match = False

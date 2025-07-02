@@ -6,6 +6,7 @@ from firebase_admin import credentials, db, initialize_app
 from bs4 import BeautifulSoup
 import firebase_admin
 import time
+import urllib.parse
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -124,3 +125,53 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps({"status": "complete", "updates": updated_books}).encode())
+
+    def do_GET(self):
+        """
+        Convenience GET endpoint: /api/check_library_holds?title=Shatter%20Me
+        """
+        try:
+            parsed = urllib.parse.urlparse(self.path)
+            query = urllib.parse.parse_qs(parsed.query)
+            filter_title = query.get("title", [None])[0]
+            logger.info(f"check_library_holds GET filter_title: {filter_title}")
+
+            books_ref = db.reference("/books")
+            all_books = books_ref.get() or {}
+            updated_books = {}
+
+            for book_id, book_data in all_books.items():
+                title = book_data.get("book_title", "")
+                author = book_data.get("author_name", "")
+                if filter_title and filter_title.lower() not in title.lower():
+                    continue
+                if not is_english(title):
+                    continue
+
+                try:
+                    hoopla_ebook, hoopla_audio = check_hoopla(title, author)
+                    ku_available = check_kindle_unlimited(title, author)
+
+                    update_data = {
+                        "hoopla_ebook_available": "Yes" if hoopla_ebook else "No",
+                        "hoopla_audio_available": "Yes" if hoopla_audio else "No",
+                        "ku_availability": "Yes" if ku_available else "No"
+                    }
+                    books_ref.child(book_id).update(update_data)
+                    updated_books[book_id] = update_data
+                except Exception as e:
+                    logger.error(f"Error updating availability for {book_id}: {e}")
+                    logger.exception(e)
+                    updated_books[book_id] = {"error": str(e)}
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "complete", "updates": updated_books}).encode())
+
+        except Exception as e:
+            logger.exception(e)
+            self.send_response(500)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode())
