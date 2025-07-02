@@ -9,7 +9,7 @@ const configPath = path.join(outputDir, 'config.json');
 fs.mkdirSync(staticDir, { recursive: true });
 fs.mkdirSync(functionsDir, { recursive: true });
 
-const routes = [];
+const routes = [{ handle: 'filesystem' }];
 
 // Copy static knowledge and instruction files
 if (fs.existsSync('static')) {
@@ -20,7 +20,7 @@ if (fs.existsSync('static')) {
   }
 }
 
-// Create a function for each Python file
+// Create a function for each top-level Python file
 for (const file of fs.readdirSync('api')) {
   if (!file.endsWith('.py')) continue;
   const name = path.basename(file, '.py');
@@ -35,6 +35,20 @@ for (const file of fs.readdirSync('api')) {
   const config = { runtime: 'python3.11', handler: 'index.py' };
   fs.writeFileSync(path.join(funcDir, '.vc-config.json'), JSON.stringify(config, null, 2));
   routes.push({ src: `/api/${name}`, dest: `functions/api/${name}.func` });
+}
+
+// Include maintenance task handler for /internal/(.*)
+const maintSrc = path.join('api', 'maintenance', '[task].py');
+if (fs.existsSync(maintSrc)) {
+  const maintDir = path.join(functionsDir, 'api/maintenance/[task].func');
+  fs.mkdirSync(maintDir, { recursive: true });
+  fs.copyFileSync(maintSrc, path.join(maintDir, 'index.py'));
+  if (fs.existsSync('requirements.txt')) {
+    fs.copyFileSync('requirements.txt', path.join(maintDir, 'requirements.txt'));
+  }
+  const config = { runtime: 'python3.11', handler: 'index.py' };
+  fs.writeFileSync(path.join(maintDir, '.vc-config.json'), JSON.stringify(config, null, 2));
+  routes.push({ src: '/internal/(.*)', dest: 'functions/api/maintenance/[task].func' });
 }
 
 fs.writeFileSync(configPath, JSON.stringify({ version: 3, routes }, null, 2));
