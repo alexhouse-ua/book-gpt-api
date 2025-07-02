@@ -4,7 +4,8 @@
     { "src": "api/**/*.py", "use": "@vercel/python" }
   ],
   "routes": [
+    { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/internal/(.*)", "dest": "api/maintenance/[task].py" },
-    { "src": "/api/(.*)",      "dest": "api/$1.py" }
+    { "src": "/api/(.*)", "dest": "api/$1.py" }
   ]
 }
