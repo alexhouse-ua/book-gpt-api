@@ -9,7 +9,7 @@ const configPath = path.join(outputDir, 'config.json');
 fs.mkdirSync(staticDir, { recursive: true });
 fs.mkdirSync(functionsDir, { recursive: true });
 
-const routes = [{ handle: 'filesystem' }];
+const routes = [];
 
 // Copy static knowledge and instruction files
 if (fs.existsSync('static')) {
@@ -50,5 +50,9 @@ if (fs.existsSync(maintSrc)) {
   fs.writeFileSync(path.join(maintDir, '.vc-config.json'), JSON.stringify(config, null, 2));
   routes.push({ src: '/internal/(.*)', dest: 'functions/api/maintenance/[task].func' });
 }
+
+// Static text file route and filesystem handler
+routes.push({ src: '/static/(.*)', dest: 'static/$1' });
+routes.push({ handle: 'filesystem' });
 
 fs.writeFileSync(configPath, JSON.stringify({ version: 3, routes }, null, 2));
