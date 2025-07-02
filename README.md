@@ -1,3 +1,5 @@
+[![Python tests](https://github.com/alexhouse-ua/book-gpt-api/actions/workflows/python-tests.yml/badge.svg)](https://github.com/alexhouse-ua/book-gpt-api/actions/workflows/python-tests.yml)
+
 # 📚 Shelf Help API
 
 Welcome to the API backend for **Shelf Help**, your personalized romance reading companion. This API powers all book data interactions with Firebase and supports your Custom GPT’s ability to track, update, and recommend books based on your reading habits.
