@@ -3,6 +3,6 @@
     "vercel": "^44.2.6"
   },
   "scripts": {
-    "vercel-build": "node build-output.js"
-  }
+  "vercel-build": "mkdir -p .vercel/output && cat <<'JSON' > .vercel/output/config.json\n{\n  \"version\": 3,\n  \"routes\": [\n    { \"handle\": \"filesystem\" },\n    { \"src\": \"/internal/(.*)\", \"dest\": \"/api/maintenance/[task].py\", \"methods\": [\"GET\", \"POST\"] },\n    { \"src\": \"/api/(.*)\", \"dest\": \"/api/$1.py\", \"methods\": [\"GET\", \"POST\"] }\n  ]\n}\nJSON"
+}
 }
