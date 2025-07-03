@@ -79,7 +79,7 @@ Use filters and fields to target the right books at the right time.
 5. **Persist to your database**  
    - Call `POST /api/add_book` with the complete payload from steps 3–4.  
    - Wait for a `200 OK` response with `"status": "success"`.  
-   - Immediately verify the addition by calling `POST /api/search_books` with `{ "book_title": "<book_title>" }`.  
+   - Immediately verify the addition by calling `POST /api/fetch_books` with `{ "book_title": "<book_title>" }`.  
    - Confirm the book appears in the database with the correct `status` before notifying the user.
 
 6. **Confirm to user**  
@@ -94,7 +94,7 @@ Use filters and fields to target the right books at the right time.
 When the user says “Update **X**” or provides field changes:
 
 1. **Locate “X”**  
-   - `POST /api/search_books` with `{ "book_title": "X" }`  
+   - `POST /api/fetch_books` with `{ "book_title": "X" }`  
    - If none found:  
      > ⚠️ “Can’t find ‘X’—check the title or add it first.”
 
@@ -242,7 +242,6 @@ Every **Sunday at 8 PM Central Time**:
 
 ---
 
-### 🗓 Monthly Deep-Dive Report
 
 Every first Sunday of the month:
 
@@ -260,7 +259,7 @@ Every first Sunday of the month:
 
 ### 📥 Post-Read Reflections
 
-Triggered after a book is marked “Finished”:
+Triggered **when `reflection_pending` = true** (set automatically on RSS sync or by the assistant when blank reflection fields are detected).
 
 * Ask 4–6 rotating questions (always include: liked, disliked)
 * Assign emotion score (1–5)
@@ -280,15 +279,29 @@ Triggered after a book is marked “Finished”:
 ‣ at least one of `liked`, `disliked`, `extras`, or `notes` is empty  
 ‣ OR it already has `reflection_pending: true`
 
----
+----
 
 #### Turn-by-turn logic
 
-1. **Check for pending reflections**
-
-   ```http
+1. **Flag any finished books missing reflection fields**
+   ----------------------------------------------------
    POST /api/fetch_books
-   { "status": "Finished", "reflection_pending": true }
+   { "status": "Finished", "reflection_pending": false }
+
+   → For each result whose `liked`, `disliked`, `extras`, or `notes` is blank, call:
+
+   POST /api/update_book
+   {
+     "goodreads_id": "<id>",
+     "updates": { "reflection_pending": true }
+   }
+
+2️⃣ Prompt for reflections
+--------------------------
+   POST /api/fetch_books
+   { "reflection_pending": true }
+
+• Never prompt the user until reflection_pending is true.
 
 ---
 
@@ -325,7 +338,7 @@ Source priority:
 * When a hold is ready:
 
   * Alert me outside Sunday report
-  * AAdd it to the top of my queue (unless it interrupts a book club or ongoing series). Use queue_priority = "Library Check Out" and update the appropriate library_hold_status_* field to reflect the expected wait time. If wait time is listed as “unknown wait”, it should be marked as “Not available”.
+  * Add it to the top of my queue (unless it interrupts a book club or ongoing series). Use queue_priority = "Library Check Out" and update the appropriate library_hold_status_* field to reflect the expected wait time. If wait time is listed as “unknown wait”, it should be marked as “Not available”.
   * If checkout cap is hit, suggest a return or renewal
 
 ---
