@@ -5,25 +5,10 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Vercel CLI
-        run: npm i -g vercel@latest
-
-      - name: Deploy (prebuilt)
-        env:
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}  # existing secret with your Vercel token
-        run: vercel deploy --prebuilt --prod --token $ADMIN_SECRET
-
   tests:
     runs-on: ubuntu-latest
-    needs: deploy  # wait for successful production deploy
     env:
       BASE_URL: https://book-gpt-api.vercel.app
-
     steps:
       - uses: actions/checkout@v4
 
