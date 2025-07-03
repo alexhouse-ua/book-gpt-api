@@ -3,4 +3,4 @@ feedparser
 requests
 beautifulsoup4
 python-dotenv
-python-dateutil
+python-dateutil>=2.9.0

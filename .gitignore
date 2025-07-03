@@ -1,3 +1,4 @@
 .vercel
 __pycache__/
 .vercel/output
+scripts/service-account.json
