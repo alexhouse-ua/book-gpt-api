@@ -208,5 +208,52 @@ paths:
         '200':
           description: Successful response
       summary: PATCH request to /api/update_book
+  /internal/{task}:
+    parameters:
+    - in: path
+      name: task
+      required: true
+      schema:
+        type: string
+        enum:
+        - ping
+        - backfill_empty_fields
+        - backfill_enrichment
+        - print_firebase_books
+      description: Maintenance task name
+    get:
+      operationId: internal_task_get
+      x-openai-isConsequential: false
+      parameters:
+      - in: header
+        name: X-Admin-Secret
+        required: true
+        schema:
+          type: string
+        description: Admin secret to authorize maintenance calls
+      responses:
+        '200':
+          description: Task executed successfully
+      summary: GET request to /internal/{task}
+    post:
+      operationId: internal_task_post
+      x-openai-isConsequential: false
+      parameters:
+      - in: header
+        name: X-Admin-Secret
+        required: true
+        schema:
+          type: string
+        description: Admin secret to authorize maintenance calls
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        required: false
+      responses:
+        '200':
+          description: Task executed successfully
+      summary: POST request to /internal/{task}
 servers:
 - url: https://book-gpt-api.vercel.app

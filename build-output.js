@@ -20,6 +20,7 @@ if (fs.existsSync('static')) {
   }
 }
 
+
 // Helper to build a Python function
 function buildPythonFunc(srcPath, funcRelDir, routeSrc) {
   const funcDir = path.join(functionsDir, funcRelDir);
@@ -37,7 +38,7 @@ function buildPythonFunc(srcPath, funcRelDir, routeSrc) {
        !fs.existsSync(path.join(funcDir, 'maintenance_tasks.py')))) {
     throw new Error(`Failed to populate ${funcDir}`);
   }
-  const config = { runtime: 'python3.11', handler: 'index.py' };
+  const config = { runtime: 'python3.12', handler: 'index.py' };
   fs.writeFileSync(path.join(funcDir, '.vc-config.json'), JSON.stringify(config, null, 2));
   routes.push({ src: routeSrc, dest: `functions/${funcRelDir}` });
 }
