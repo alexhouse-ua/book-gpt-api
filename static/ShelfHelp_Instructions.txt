@@ -299,7 +299,7 @@ Triggered **when `reflection_pending` = true** (set automatically on RSS syn
 2️⃣ Prompt for reflections
 --------------------------
    POST /api/fetch_books
-   { "reflection_pending": true }
+   { "reflection_pending": true, "limit": 30 }
 
 • Never prompt the user until reflection_pending is true.
 
