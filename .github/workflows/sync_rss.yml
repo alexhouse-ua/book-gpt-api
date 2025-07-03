@@ -1,14 +1,15 @@
 name: Sync Goodreads RSS
 
-# triggers twice daily at 7:30 PM Central (00:30 & 12:30 UTC)
 on:
   schedule:
+    # 07:30 PM & 07:30 AM Central Time
     - cron: '30 00 * * *'
     - cron: '30 12 * * *'
+  workflow_dispatch:  # lets you run it by hand
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Goodreads RSS sync
-        run: curl -X GET https://book-gpt-api.vercel.app/api/sync_rss
+        run: curl -sS https://book-gpt-api.vercel.app/api/sync_rss
