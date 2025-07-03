@@ -68,7 +68,13 @@ def _matches(book: Dict[str, Any], filters: Dict[str, Any]) -> bool:
             continue  # ignore unsupported keys silently
         if v is None:
             continue
-        actual = book.get(k)
+        # Allow cross‑field matching between title ↔ book_title
+        if k == "title":
+            actual = book.get("title") or book.get("book_title")
+        elif k == "book_title":
+            actual = book.get("book_title") or book.get("title")
+        else:
+            actual = book.get(k)
         if isinstance(actual, str) and isinstance(v, str):
             # For title searches, allow substring (case‑insensitive) matching
             if k in ("title", "book_title"):
