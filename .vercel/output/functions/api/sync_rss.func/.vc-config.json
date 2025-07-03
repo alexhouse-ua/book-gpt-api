@@ -1,0 +1,4 @@
+{
+  "runtime": "python3.12",
+  "handler": "index.py"
+}
