@@ -1,5 +1,5 @@
 {
-  "framework": "other",
+  "framework": null,
   "buildCommand": "npm run vercel-build",
   "outputDirectory": ".vercel/output"
 }
