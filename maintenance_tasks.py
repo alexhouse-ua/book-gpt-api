@@ -134,3 +134,32 @@ def print_firebase_books(_body):    # /internal/print_firebase_books
             row["goodreads_id"] = book_id
             w.writerow(row)
     return {"exported_to": path}
+
+# ---------------------------------------------------------------------------
+def backfill_reflection_pending(_: dict):
+    """
+    Set reflection_pending on ALL finished books that still have blank reflection
+    fields. Safe to run repeatedly – does only the necessary updates.
+    """
+    from firebase_admin import db          # imported lazily to keep cold-start small
+
+    ref = db.reference("/books")
+    books = ref.get() or {}
+    updated = 0
+
+    for bid, bk in books.items():
+        if bk.get("status") != "Finished":
+            continue
+        liked     = bk.get("liked", "")
+        disliked  = bk.get("disliked", "")
+        extras    = bk.get("extras", "")
+        notes     = bk.get("notes", "")
+
+        need_flag = any(not fld for fld in (liked, disliked, extras, notes))
+        if bk.get("reflection_pending") == need_flag:
+            continue  # already correct
+
+        ref.child(bid).update({"reflection_pending": need_flag})
+        updated += 1
+
+    return {"updated_records": updated}
