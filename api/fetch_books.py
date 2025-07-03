@@ -70,8 +70,14 @@ def _matches(book: Dict[str, Any], filters: Dict[str, Any]) -> bool:
             continue
         actual = book.get(k)
         if isinstance(actual, str) and isinstance(v, str):
-            if actual.lower() != str(v).lower():
-                return False
+            # For title searches, allow substring (case‑insensitive) matching
+            if k in ("title", "book_title"):
+                if str(v).lower() not in actual.lower():
+                    return False
+            else:
+                # All other string fields must match exactly (case‑insensitive)
+                if actual.lower() != str(v).lower():
+                    return False
         else:
             if actual != v:
                 return False
