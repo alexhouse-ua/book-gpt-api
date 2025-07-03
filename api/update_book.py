@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from utils.dates import to_yyyy_mm_dd
+from .utils.dates import to_yyyy_mm_dd
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
