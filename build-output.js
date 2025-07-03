@@ -20,42 +20,42 @@ if (fs.existsSync('static')) {
   }
 }
 
-// Create a function for each Python file
 
-for (const file of fs.readdirSync('api')) {
-  if (!file.endsWith('.py')) continue;
-  const name = path.basename(file, '.py');
-  const funcDir = path.join(functionsDir, `api/${name}.func`);
+// Helper to build a Python function
+function buildPythonFunc(srcPath, funcRelDir, routeSrc) {
+  const funcDir = path.join(functionsDir, funcRelDir);
   fs.mkdirSync(funcDir, { recursive: true });
-  fs.copyFileSync(path.join('api', file), path.join(funcDir, 'index.py'));
-
-  // copy shared requirements so the Python runtime installs dependencies
+  fs.copyFileSync(srcPath, path.join(funcDir, 'index.py'));
+  if (funcRelDir.includes('maintenance/[task].func')) {
+    fs.copyFileSync('maintenance_tasks.py', path.join(funcDir, 'maintenance_tasks.py'));
+  }
   if (fs.existsSync('requirements.txt')) {
     fs.copyFileSync('requirements.txt', path.join(funcDir, 'requirements.txt'));
   }
-
-  const config = { runtime: 'python3.12', handler: 'index.py' };
-
-  fs.writeFileSync(path.join(funcDir, '.vc-config.json'), JSON.stringify(config, null, 2));
-  routes.push({ src: `/api/${name}`, dest: `functions/api/${name}.func` });
-}
-
-// Include maintenance task handler for /internal/(.*)
-const maintSrc = path.join('api', 'maintenance', '[task].py');
-if (fs.existsSync(maintSrc)) {
-  const maintDir = path.join(functionsDir, 'api/maintenance/[task].func');
-  fs.mkdirSync(maintDir, { recursive: true });
-  fs.copyFileSync(maintSrc, path.join(maintDir, 'index.py'));
-  if (fs.existsSync('requirements.txt')) {
-    fs.copyFileSync('requirements.txt', path.join(maintDir, 'requirements.txt'));
+  // ensure files exist before writing config
+  if (!fs.existsSync(path.join(funcDir, 'index.py')) ||
+      (funcRelDir.includes('maintenance/[task].func') &&
+       !fs.existsSync(path.join(funcDir, 'maintenance_tasks.py')))) {
+    throw new Error(`Failed to populate ${funcDir}`);
   }
-  const config = { runtime: 'python3.11', handler: 'index.py' };
-  fs.writeFileSync(path.join(maintDir, '.vc-config.json'), JSON.stringify(config, null, 2));
-  routes.push({ src: '/internal/(.*)', dest: 'functions/api/maintenance/[task].func' });
+  const config = { runtime: 'python3.12', handler: 'index.py' };
+  fs.writeFileSync(path.join(funcDir, '.vc-config.json'), JSON.stringify(config, null, 2));
+  routes.push({ src: routeSrc, dest: `functions/${funcRelDir}` });
 }
 
-// Static text file route and filesystem handler
-routes.push({ src: '/static/(.*)', dest: 'static/$1' });
-routes.push({ handle: 'filesystem' });
+// Top level api Python files
+for (const file of fs.readdirSync('api')) {
+  const p = path.join('api', file);
+  if (fs.statSync(p).isFile() && file.endsWith('.py')) {
+    const name = path.basename(file, '.py');
+    buildPythonFunc(p, `api/${name}.func`, `/api/${name}`);
+  }
+}
+
+// maintenance dynamic function
+const maintFile = path.join('api', 'maintenance', '[task].py');
+if (fs.existsSync(maintFile)) {
+  buildPythonFunc(maintFile, 'api/maintenance/[task].func', '/internal/(.*)');
+}
 
 fs.writeFileSync(configPath, JSON.stringify({ version: 3, routes }, null, 2));
