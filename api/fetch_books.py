@@ -11,14 +11,14 @@ Example curl:
       -d '{"reflection_pending": true}' \
       https://book-gpt-api.vercel.app/api/fetch_books
 
-Returns a JSON list of matching book dicts.
+Returns a JSON object: {"books": [ ... ]}
 """
 
 from http.server import BaseHTTPRequestHandler
 import json
 import logging
 import os
-from types import SimpleNamespace
+import io
 from typing import Dict, Any, List
 
 import firebase_admin
@@ -70,7 +70,7 @@ def _matches(book: Dict[str, Any], filters: Dict[str, Any]) -> bool:
             continue
         actual = book.get(k)
         if isinstance(actual, str) and isinstance(v, str):
-            if actual.lower() != v.lower():
+            if actual.lower() != str(v).lower():
                 return False
         else:
             if actual != v:
@@ -104,11 +104,11 @@ class handler(BaseHTTPRequestHandler):
         results = _filter_books(filters)
         logger.info("fetch_books filters=%s → %d matches", filters, len(results))
 
-        # Respond JSON list
+        # Respond JSON object with books list (tests expect this wrapper)
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(results).encode())
+        self.wfile.write(json.dumps({"books": results}).encode())
 
     def do_POST(self):  # noqa: N802
         try:
@@ -122,16 +122,20 @@ class handler(BaseHTTPRequestHandler):
 
     # Allow GET with ?reflection_pending=true for quick dev checks
     def do_GET(self):  # noqa: N802
-        # Convert query params to our filters dict
         from urllib.parse import parse_qs, urlparse
 
         qs = parse_qs(urlparse(self.path).query)
-        body = {
-            k: (v[0].lower() == "true" if k == "reflection_pending" else v[0])
-            for k, v in qs.items()
-            if k in ALLOWED_FIELDS
-        }
-        # Mimic POST path by stashing JSON in rfile
-        self.headers["Content-Length"] = str(len(json.dumps(body)))
-        self.rfile = io.BytesIO(json.dumps(body).encode())  # type: ignore
+        filters = {}
+        for k, v in qs.items():
+            if k not in ALLOWED_FIELDS:
+                continue
+            val = v[0]
+            if k == "reflection_pending":
+                val = val.lower() == "true"
+            filters[k] = val
+
+        # Mimic POST by serialising into rfile
+        payload = json.dumps(filters).encode()
+        self.headers["Content-Length"] = str(len(payload))
+        self.rfile = io.BytesIO(payload)  # type: ignore
         self.do_POST()
