@@ -8,7 +8,7 @@ ONE Serverless Function that handles any path like
 import json, os, logging, importlib
 from http.server import BaseHTTPRequestHandler
 
-ADMIN_SECRET = os.getenv("ADMIN_SECRET", "change-me")  # set in Vercel dashboard
+ADMIN_SECRET = os.getenv("ADMIN_SECRET", "Sher10ck&Wat")  # set in Vercel dashboard
 logger = logging.getLogger(__name__)
 
 def _resp(h: BaseHTTPRequestHandler, code: int, payload: dict):
