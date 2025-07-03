@@ -2,10 +2,8 @@ name: Sync Goodreads RSS
 
 on:
   schedule:
-    # 07:30 PM & 07:30 AM Central Time
-    - cron: '30 00 * * *'
-    - cron: '30 12 * * *'
-  workflow_dispatch:  # lets you run it by hand
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch:       # keep manual trigger
 
 jobs:
   sync:
