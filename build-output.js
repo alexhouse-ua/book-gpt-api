@@ -20,7 +20,8 @@ if (fs.existsSync('static')) {
   }
 }
 
-// Create a function for each top-level Python file
+// Create a function for each Python file
+
 for (const file of fs.readdirSync('api')) {
   if (!file.endsWith('.py')) continue;
   const name = path.basename(file, '.py');
@@ -32,7 +33,9 @@ for (const file of fs.readdirSync('api')) {
   if (fs.existsSync('requirements.txt')) {
     fs.copyFileSync('requirements.txt', path.join(funcDir, 'requirements.txt'));
   }
-  const config = { runtime: 'python3.11', handler: 'index.py' };
+
+  const config = { runtime: 'python3.12', handler: 'index.py' };
+
   fs.writeFileSync(path.join(funcDir, '.vc-config.json'), JSON.stringify(config, null, 2));
   routes.push({ src: `/api/${name}`, dest: `functions/api/${name}.func` });
 }
