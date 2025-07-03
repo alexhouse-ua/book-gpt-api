@@ -1,11 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/**/*.py", "use": "@vercel/python" }
-  ],
-  "routes": [
-    { "src": "/static/(.*)", "dest": "static/$1" },
-    { "src": "/internal/(.*)", "dest": "api/maintenance/[task].py" },
-    { "src": "/api/(.*)",     "dest": "api/$1.py" }
-  ]
+  "framework": null,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".vercel/output"
 }

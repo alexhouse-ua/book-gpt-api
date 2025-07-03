@@ -9,7 +9,8 @@ const configPath = path.join(outputDir, 'config.json');
 fs.mkdirSync(staticDir, { recursive: true });
 fs.mkdirSync(functionsDir, { recursive: true });
 
-const routes = [];
+// Ensure static assets are served before dynamic routes
+const routes = [{ handle: 'filesystem' }];
 
 // Copy static knowledge and instruction files
 if (fs.existsSync('static')) {
