@@ -61,6 +61,13 @@ class handler(BaseHTTPRequestHandler):
             ref = db.reference(f"/books/{book_id}")
             if ref.get():
                 current_data = ref.get()
+                # Merge current data with incoming updates to compute reflection flag
+                preview = {**current_data, **updates}
+                need_reflection = (
+                    preview.get("status") == "Finished"
+                    and any(not preview.get(fld) for fld in ("liked", "disliked", "extras", "notes"))
+                )
+                updates["reflection_pending"] = need_reflection
                 logger.info("update_book: Current values: %s", json.dumps(current_data, indent=2))
                 logger.info("update_book: Applying updates: %s", json.dumps(updates, indent=2))
                 logger.info("update_book: Book %s found, applying updates: %s", book_id, updates)

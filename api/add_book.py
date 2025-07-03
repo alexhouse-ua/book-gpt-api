@@ -69,6 +69,12 @@ class handler(BaseHTTPRequestHandler):
             for field in default_fields:
                 if field not in data:
                     data[field] = ""
+            # ── Derive reflection_pending flag ──
+            need_reflection = (
+                data.get("status") == "Finished"
+                and any(not data.get(fld) for fld in ("liked", "disliked", "extras", "notes"))
+            )
+            data["reflection_pending"] = need_reflection
             ref.set(data)
             logger.info("Book %s added successfully with fields:\n%s", book_id, json.dumps(data, indent=2))
 
