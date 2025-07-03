@@ -112,8 +112,15 @@ class handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             body = {}
 
-        filters: Dict[str, Any] = {k: body.get(k) for k in ALLOWED_FIELDS if k in body}
-        results = _filter_books(filters)
+        # Optional limit (defaults to 100, max 500)
+        try:
+            limit = int(body.pop("limit", 100))
+        except (TypeError, ValueError):
+            limit = 100
+        limit = max(1, min(limit, 500))
+
+        filters: Dict[str, Any] = {k: body[k] for k in ALLOWED_FIELDS if k in body}
+        results = _filter_books(filters)[:limit]
         logger.info("fetch_books filters=%s → %d matches", filters, len(results))
 
         # Respond JSON object with books list (tests expect this wrapper)
@@ -145,6 +152,19 @@ class handler(BaseHTTPRequestHandler):
             if k == "reflection_pending":
                 val = val.lower() == "true"
             filters[k] = val
+
+        # Parse ?limit=xxx  (defaults handled in _run)
+        limit_param = qs.get("limit", [None])[0]
+        if limit_param:
+            try:
+                body_limit = int(limit_param)
+            except ValueError:
+                body_limit = 100
+        else:
+            body_limit = 100
+
+        # Serialize into POST body including limit
+        filters["limit"] = body_limit
 
         # Mimic POST by serialising into rfile
         payload = json.dumps(filters).encode()
