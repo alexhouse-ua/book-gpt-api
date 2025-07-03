@@ -15,7 +15,7 @@ jobs:
 
       - name: Deploy (prebuilt)
         env:
-          VERCEL_TOKEN: ${{ secrets.ADMIN_SECRET }}  # existing secret with your Vercel token
+          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}  # existing secret with your Vercel token
         run: vercel deploy --prebuilt --prod --yes
 
   tests:
