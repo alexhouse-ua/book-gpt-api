@@ -272,6 +272,25 @@ Triggered after a book is marked “Finished”:
 
 ---
 
+### 🪞 Reflection Workflow (auto-runs once per turn)
+
+**When is a reflection required?**
+
+‣ A book is considered **pending reflection** if **all** of the following are true  
+  – `status` = `"Finished"`  
+  – **at least one** of `liked`, `disliked`, `extras`, or `notes` is `""` (empty or missing)  
+
+If the above is true **and** `reflection_pending` is not already `true`, the assistant must immediately set it:
+
+```http
+POST /api/update_book
+{
+  "goodreads_id": "<id>",
+  "updates": { "reflection_pending": true }
+}
+
+---
+
 ### 📘 TBR & Queue Rules
 
 * I manually add TBRs by telling the GPT (they go in Firebase with status: "TBR")
