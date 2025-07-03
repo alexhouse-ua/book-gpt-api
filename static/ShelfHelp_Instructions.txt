@@ -272,22 +272,23 @@ Triggered after a book is marked “Finished”:
 
 ---
 
-### 🪞 Reflection Workflow (auto-runs once per turn)
+### 🪞 Reflection Workflow
 
-**When is a reflection required?**
+**A book needs reflection when**
 
-‣ A book is considered **pending reflection** if **all** of the following are true  
-  – `status` = `"Finished"`  
-  – **at least one** of `liked`, `disliked`, `extras`, or `notes` is `""` (empty or missing)  
+‣ `status` = "Finished" **and**  
+‣ at least one of `liked`, `disliked`, `extras`, or `notes` is empty  
+‣ OR it already has `reflection_pending: true`
 
-If the above is true **and** `reflection_pending` is not already `true`, the assistant must immediately set it:
+---
 
-```http
-POST /api/update_book
-{
-  "goodreads_id": "<id>",
-  "updates": { "reflection_pending": true }
-}
+#### Turn-by-turn logic
+
+1. **Check for pending reflections**
+
+   ```http
+   POST /api/fetch_books
+   { "status": "Finished", "reflection_pending": true }
 
 ---
 
