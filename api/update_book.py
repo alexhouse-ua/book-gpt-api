@@ -7,6 +7,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from utils.dates import to_yyyy_mm_dd
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         logger.info("update_book: Received request with headers: %s", dict(self.headers))
@@ -38,6 +40,16 @@ class handler(BaseHTTPRequestHandler):
 
             book_id = data.get("goodreads_id")
             updates = data.get("updates")
+
+            # Normalise date fields in updates
+            for fld in ("updated_at", "user_date_added", "user_date_created"):
+                if fld in updates:
+                    updates[fld] = to_yyyy_mm_dd(updates[fld])
+            if "user_read_at" in updates:
+                clean = to_yyyy_mm_dd(updates["user_read_at"])
+                if clean:
+                    updates["user_read_at"] = clean
+                    updates["goal_year"] = int(clean[:4])
 
             if not updates:
                 updates = {k: v for k, v in data.items() if k != "goodreads_id"}

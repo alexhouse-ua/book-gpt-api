@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 import feedparser
 import firebase_admin
 from firebase_admin import credentials, db
+from utils.dates import to_yyyy_mm_dd
 
 # ───────────────────── Logging ──────────────────────
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
@@ -98,9 +99,9 @@ def _upsert_entry(entry):
         "isbn": entry.get("isbn", ""),
         "user_name": entry.get("user_name", ""),
         "user_rating": entry.get("user_rating", ""),
-        "user_read_at": entry.get("user_read_at", ""),
-        "user_date_added": entry.get("user_date_added", ""),
-        "user_date_created": entry.get("user_date_created", ""),
+        "user_read_at": to_yyyy_mm_dd(entry.get("user_read_at")),
+        "user_date_added": to_yyyy_mm_dd(entry.get("user_date_added")),
+        "user_date_created": to_yyyy_mm_dd(entry.get("user_date_created")),
         "user_shelves": entry.get("user_shelves", ""),
         "user_review": entry.get("user_review", ""),
         "average_rating": entry.get("average_rating", ""),
@@ -109,8 +110,12 @@ def _upsert_entry(entry):
         # ‑‑ Derived / sync fields ‑‑
         "status": "Finished",  # Always finished in the read‑shelf feed
         "reflection_pending": True,
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.utcnow().date().isoformat(),
     }
+
+    # Derive goal_year from user_read_at (if present)
+    if book_data.get("user_read_at"):
+        book_data["goal_year"] = int(book_data["user_read_at"][:4])
 
     ref = db.reference(f"/books/{book_id}")
     existing = ref.get()
@@ -118,6 +123,9 @@ def _upsert_entry(entry):
     if existing:
         # Prepare a diff‑only update dict to avoid overwriting user edits
         update_data = {k: v for k, v in book_data.items() if existing.get(k) != v and v}
+        # If user_read_at changed or goal_year missing, patch goal_year
+        if "user_read_at" in update_data or ("goal_year" not in existing and book_data.get("goal_year")):
+            update_data["goal_year"] = book_data["goal_year"]
         if update_data:
             ref.update(update_data)
             logger.info("Updated existing book %s (%s) → %s fields", book_title, book_id, len(update_data))
